@@ -10,6 +10,7 @@ Dependencies
 * Flex 4 SDK
 * ArcGIS Flex API 2.5
 * Ant 1.8.3
+* Eventbrite API Key
 
 ## Installation instruction 
 
@@ -18,6 +19,11 @@ export JAVA_HOME={root of the java installation - e.g. /usr
 export ANT_HOME={Directory where you installed Ant}
 export FLEX_HOME={Directory where you install Flex}
 export PATH=${PATH}:${ANT_HOME}/bin
+
+# Set configuration file.
+* Open config/Config.xml.template
+* Set each configuration parmaeter with appropriate value
+* Rename config/Config.xml.template as config/Config.xml
 
 # Go to the root of the checkout directory and build app
 % cd {root of the checkout}
