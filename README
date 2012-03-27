@@ -28,3 +28,8 @@ export PATH=${PATH}:${ANT_HOME}/bin
 # Go to the root of the checkout directory and build app
 % cd {root of the checkout}
 % ant -lib ${FLEX_HOME}/ant/lib/flexTasks.jar main
+
+## TODO
+
+# Incorporate "Direction to the Event location" functionality
+# Implement Javascript version of the app
