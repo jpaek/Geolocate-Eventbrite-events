@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- mySimpleBuild.xml -->
+<project name="My App Builder" basedir=".">
+  <taskdef resource="flexTasks.tasks"
+           classpath="${basedir}/flexTasks/lib/flexTasks.jar"/>
+  <property environment="env"/>
+  <property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
+  <property name="APP_ROOT" value="src"/>
+  <property name="DEPLOY_DIR" value="build" />
+  <property name="TEMPLATE_DIR" value="template" />
+  <property name="PHP_DIR" value="php" />
+  <property name="ASSET_DIR" value="assets" />
+  <property name="CONFIG_DIR" value="config" />
+
+  
+  <target name="clean">
+    <delete dir="${DEPLOY_DIR}" />
+  </target>
+
+  <target name="init">
+    <mkdir dir="${DEPLOY_DIR}" /> 
+  </target>
+    
+  <target name="main" depends="init">
+
+    <mxmlc file="${APP_ROOT}/view/Main.mxml" 
+           output="${DEPLOY_DIR}/Main.swf"
+           incremental="false">
+      <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+      <source-path path-element="${APP_ROOT}" />
+      <compiler.library-path dir="." append="true">
+        <include name="lib" />
+        <include name="../bundles/{locale}" />
+      </compiler.library-path>
+    </mxmlc>
+
+    <copy todir="${DEPLOY_DIR}">
+      <fileset dir="${TEMPLATE_DIR}" />
+    </copy>
+    <copy todir="${DEPLOY_DIR}/php">
+      <fileset dir="${PHP_DIR}" />
+    </copy>
+    <copy todir="${DEPLOY_DIR}/config">
+      <fileset dir="${CONFIG_DIR}" />
+    </copy>
+
+  </target>
+
+  <target name="wrapper">
+    <html-wrapper 
+          title="Welcome to My Flex App"
+          file="index.html"
+          height="300"
+          width="400"
+          bgcolor="red"
+          application="app"
+          swf="Main"
+          version-major="11"
+          version-minor="0"
+          version-revision="0"
+          history="true"
+          output="${TEMPLATE_DIR}"/>
+  </target>
+
+  <target name="cleanWrapper">
+    <delete>
+      <!-- Deletes playerProductInstall.swf -->
+      <fileset dir="${TEMPLATE_DIR}" 
+               includes="playerProductInstall.swf" 
+               defaultexcludes="false"/>
+      <!-- Deletes index.html and historyFrame.html -->
+      <fileset dir="${TEMPLATE_DIR}" includes="*.html" defaultexcludes="false"/>
+      <!-- Deletes history.css -->
+      <fileset dir="${TEMPLATE_DIR}" includes="*.css" defaultexcludes="false"/>
+      <!-- Deletes history.js and AC_OETags.js -->
+      <fileset dir="${TEMPLATe_DIR}" includes="*.js" defaultexcludes="false"/>
+    </delete>
+  </target>
+
+</project>

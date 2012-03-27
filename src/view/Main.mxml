@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+           xmlns:s="library://ns.adobe.com/flex/spark"
+           xmlns:mx="library://ns.adobe.com/flex/mx"
+           xmlns:mainComponent="view.mainComponent.*"
+           creationComplete="prv_init()"
+           pageTitle="Event Geolocator">
+  <!--
+    Search for events from eventbrite and display a 
+    selected event on the map.
+  -->
+
+  <s:layout> 
+    <s:BasicLayout/> 
+  </s:layout>
+
+  <fx:Script source="../controller/Main.as" />
+
+
+  <s:Scroller width="100%" height="100%">
+    <s:HGroup width="100%" height="100%">
+      <mainComponent:Map id="m_map"
+                         width="50%" height="100%"
+                         top="5"
+                         horizontalCenter="0"
+                         title="Locate Event" />
+      <mainComponent:EventList id ="m_eventList" 
+                               width="50%" height="100%"
+                               top="5" horizontalCenter="0"
+                               title="Event List" 
+                               mapLocation="prv_onMapLocationEvent(event)" />
+    </s:HGroup>
+  </s:Scroller>
+</s:Application>

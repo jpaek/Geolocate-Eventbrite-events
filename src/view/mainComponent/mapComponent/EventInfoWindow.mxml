@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+xmlns:s="library://ns.adobe.com/flex/spark" 
+xmlns:mx="library://ns.adobe.com/flex/mx">
+
+  <!-- 
+
+  Implements the info window content interface
+
+  -->
+
+
+  <fx:Script 
+   source="../../../controller/mainComponent/mapComponent/EventInfoWindow.as" />
+
+  <s:layout>
+    <s:VerticalLayout horizontalAlign="left" verticalAlign="top" />
+  </s:layout>
+  
+  
+  <!-- Text area to dispaly event information -->
+  <mx:TextArea id="m_eventDescriptionArea"
+               width="100%"
+               height="80%"
+               editable="false" />
+
+  <!-- Twitter button -->
+  <mx:Button id="m_twitterButton" 
+             label="Tweet" labelPlacement="right"
+             paddingLeft="2"
+             icon="@Embed('../../../../assets/bird_16_blue.png')"
+             color="0x323232" 
+             click="prv_tweet()" />
+
+  <!-- To be implemented - Form to get the direction to the event location -->
+  <!-- mx:Form>
+    <mx:FormItem label="From">
+      <s:TextInput id="m_fromAdress" />
+    </mx:FormItem>
+      
+    <mx:FormItem>
+      <s:Button label="Get Direction" click="prv_getDirection()" /> 
+    </mx:FormItem>
+  </mx:Form -->
+              
+</s:Panel>
