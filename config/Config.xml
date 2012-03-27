@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <config>
-  <eventbriteAppKey>DDWHPABY5JVE4HHN6O</eventbriteAppKey>
-  <locatorUrl>http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Address_NA_10/GeocodeServer</locatorUrl>  
-  <mapUrl>http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer</mapUrl>
+  <eventbriteAppKey></eventbriteAppKey>
+  <locatorUrl></locatorUrl>  
+  <mapUrl></mapUrl>
   <eventQueryUrl>php/getEvents.php</eventQueryUrl>
-  <locatorOutFields>Loc_name</locatorOutFields>
-  <wkid>102100</wkid>
-  <lonMin>-13046000</lonMin>
-  <latMin>4028000</latMin>
-  <lonMax>-13024000</lonMax>
-  <latMax>4041000</latMax>
-  <!-- lonMin>-20037507.0671618</lonMin>
-  <latMin>-19971868.8804086</latMin>
-  <lonMax>20037507.0671618</lonMax>
-  <latMax>19971868.8804086</latMax -->
+  <locatorOutFields></locatorOutFields>
+  <wkid></wkid>
+  <lonMin></lonMin>
+  <latMin></latMin>
+  <lonMax></lonMax>
+  <latMax></latMax>
 </config>
