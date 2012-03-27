@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--  -->
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+         xmlns:s="library://ns.adobe.com/flex/spark" 
+         xmlns:mx="library://ns.adobe.com/flex/mx"
+         xmlns:esri="http://www.esri.com/2008/ags"
+         xmlns:mapComponent="view.mainComponent.mapComponent.*">
+
+  <!-- 
+ 
+  Implements map interface used to display the location of events
+
+  -->
+
+  <fx:Script source="../../controller/mainComponent/Map.as" />
+
+  <s:layout>
+    <s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
+  </s:layout>
+
+  <!-- Define locator and symbol to mark event location -->
+  <fx:Declarations>
+    <esri:Locator id="m_locateTask" />
+
+    <esri:SimpleMarkerSymbol id="m_eventSymbol"
+                             alpha="0.5"
+                             color="0xFF0000"
+                             size="21"
+                             style="circle">
+      <esri:SimpleLineSymbol width="2"/>
+    </esri:SimpleMarkerSymbol>
+  </fx:Declarations>
+
+  <!-- ArcGIS Map component to display events -->
+  <esri:Map id="m_map">
+   
+    <!-- Infowindow to display event infomration -->
+    <esri:infoWindowContent>
+      <mapComponent:EventInfoWindow id="m_eventInfoWindow" width="300" /> 
+    </esri:infoWindowContent>
+
+    <!-- Base map layer -->
+    <esri:ArcGISTiledMapServiceLayer id="m_mapLayer" />
+
+    <!-- Graphics layer to place the events on the map -->
+    <esri:GraphicsLayer id="m_graphicsLayer"/>
+  </esri:Map>
+</s:Panel>

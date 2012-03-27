@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+xmlns:s="library://ns.adobe.com/flex/spark" 
+xmlns:mx="library://ns.adobe.com/flex/mx">
+
+  <!-- 
+
+  Implements the search and result list interface
+
+  -->
+
+  <fx:Script source="../../controller/mainComponent/EventList.as" />
+
+  <!-- Define the events triggered by this module -->
+  <fx:Metadata>
+    [Event(name="mapLocation", type="libs.events.MapLocationEvent")]
+  </fx:Metadata>
+  
+  <s:layout>
+    <s:VerticalLayout horizontalAlign="center" verticalAlign="top" />
+  </s:layout>
+  
+  <!-- Search form -->
+  <mx:Form width="100%" color="0x323232" paddingTop="0">
+    <mx:FormHeading fontSize="10"  label="Find Events" paddingTop="0" />
+    
+    <mx:FormItem label="Keyword">
+      <s:TextInput id="m_keyword" width="200"/>
+    </mx:FormItem>
+
+    <mx:FormItem>
+      <s:Button click="prv_requestEventList()" label="Submit Event Query" />
+    </mx:FormItem> 
+  </mx:Form>
+
+  <!-- Result list form -->
+  <s:Label text="Click on an Event to View it on the Map" />
+  <s:List id="m_eventTable" 
+          width="100%" 
+          labelFunction="prv_labelEvents"
+          change="prv_requestEventMapping(event)">
+    <s:layout>
+      <s:VerticalLayout horizontalAlign="justify" 
+                        requestedRowCount="6" />
+    </s:layout>
+  </s:List>
+</s:Panel>

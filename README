@@ -1,0 +1,24 @@
+#### Geolocate Eventbrite events
+
+## Search events from eventbrite and place the event on the map
+
+## Pre-requisites
+OS: *nix
+
+Dependencies
+* Java 6
+* Flex 4 SDK
+* ArcGIS Flex API 2.5
+* Ant 1.8.3
+
+## Installation instruction 
+
+# Set environment variables
+export JAVA_HOME={root of the java installation - e.g. /usr
+export ANT_HOME={Directory where you installed Ant}
+export FLEX_HOME={Directory where you install Flex}
+export PATH=${PATH}:${ANT_HOME}/bin
+
+# Go to the root of the checkout directory and build app
+% cd {root of the checkout}
+% ant -lib ${FLEX_HOME}/ant/lib/flexTasks.jar main
