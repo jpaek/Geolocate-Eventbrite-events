@@ -44,7 +44,7 @@ package libs.helpers {
 
 
   // ==========================================================================
-  // Event triggered by change in gate selections. 
+  // Class defining Config Event
   public class Config extends EventDispatcher{
 
     // ------------------------------------------------------------------------

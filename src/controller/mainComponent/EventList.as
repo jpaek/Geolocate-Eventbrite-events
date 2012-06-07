@@ -80,8 +80,7 @@ private function prv_eventListResult(event:ResultEvent):void {
   // There was a problem with the query.
   // Print the error message.
   if (event.result.events.hasOwnProperty("error")) {
-    Alert.show("Event List Query Failed: ", 
-               event.result.events.error); 
+    Alert.show(event.result.events.error, "Event List Query Failed"); 
     return;
   }
 

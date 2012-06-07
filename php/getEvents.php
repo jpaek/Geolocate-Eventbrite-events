@@ -99,57 +99,22 @@ foreach ($queryResult->events as $resultEvent) {
   }
  
   // Add the event to the event list
-  
-  set_error_handler('handleError');
-  try {
-    $event = $eventList->addChild('event');
-    $event->addChild('id', 
-                     iconv('ISO-8859-1', 'UTF-8', $resultEvent->id));
-    $event->addChild('title', 
-                     iconv('ISO-8859-1', 'UTF-8', $resultEvent->title));
-    $event->addChild('start_date', 
-                     iconv('ISO-8859-1', 'UTF-8', $resultEvent->start_date));
-    $event->addChild('end_date', 
-                     iconv('ISO-8859-1', 'UTF-8', $resultEvent->end_date));
-    $event->addChild('url', 
-                     iconv('ISO-8859-1', 'UTF-8', $resultEvent->url));
-    $event->addChild('latitude', 
-                     iconv('ISO-8859-1', 'UTF-8', $resultVenue->latitude));
-    $event->addChild('longitude', 
-                     iconv('ISO-8859-1', 'UTF-8', $resultVenue->longitude));
-    $event->addChild('venue', 
-                     iconv('ISO-8859-1', 'UTF-8', $resultVenue->name));
-    $event->addChild('organizer', 
-                     iconv('ISO-8859-1', 'UTF-8', 
-                           $resultEvent->organizer->name));
-  }
-
-  // I have noticed that some of the results from Eventbrite is missing the
-  // required fields.  In this case, just continue on to the next result
-  catch (Exception $e) {
-    continue;
-  }
+  $event = $eventList->addChild('event');
+  $event->id = iconv('ISO-8859-1', 'UTF-8', $resultEvent->id);
+  $event->title = iconv('ISO-8859-1', 'UTF-8', $resultEvent->title);
+  $event->start_date = iconv('ISO-8859-1', 'UTF-8', $resultEvent->start_date);
+  $event->end_date = iconv('ISO-8859-1', 'UTF-8', $resultEvent->end_date);
+  $event->url = iconv('ISO-8859-1', 'UTF-8', $resultEvent->url);
+  $event->latitude = iconv('ISO-8859-1', 'UTF-8', $resultVenue->latitude);
+  $event->longitude = iconv('ISO-8859-1', 'UTF-8', $resultVenue->longitude);
+  $event->venue = iconv('ISO-8859-1', 'UTF-8', $resultVenue->name);
+  $event->organizer = iconv('ISO-8859-1', 'UTF-8', 
+                            $resultEvent->organizer->name);
 }
 
 
 // ----------------------------------------------------------------------------
 // Print output.
 echo $eventList->asXML();
-
-
-// ----------------------------------------------------------------------------
-// Error handler function to catch all warnings and errors when
-// parsing JSON result into XML doc.
-// Source: http://stackoverflow.com/questions/1241728/can-i-try-catch-a-warning 
-function handleError($errno, $errstr, $errfile, $errline, array $errcontext)
-{
-    // error was suppressed with the @-operator
-    if (0 === error_reporting()) {
-        return false;
-    }
-
-    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-}
-
 
 ?>
