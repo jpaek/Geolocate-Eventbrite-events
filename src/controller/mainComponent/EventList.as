@@ -39,6 +39,11 @@ public function init(config:Config):void {
   // Initialize the container to store the matching events
   m_eventList = new ArrayCollection();
   m_eventTable.dataProvider = m_eventList;
+
+  // Initialize the container to store the country list
+  m_countryList = new ArrayCollection([{label: "Any Country", data: ""},
+                                       {label: "Canada", data: "CA"},
+                                       {label: "USA", data: "US"}]);
 }
 
 // =============================================================================
@@ -47,7 +52,7 @@ public function init(config:Config):void {
 // -----------------------------------------------------------------------------
 // Helper function to format the event entries in the m_eventTable list.
 private function prv_labelEvents(item:Object):String {
-  return item.title + " (" + item.start_date + "): " + item.address;
+  return item.title + " (" + item.start_date + "): " + item.venue;
 }
 
 // -----------------------------------------------------------------------------
@@ -61,7 +66,8 @@ private function prv_requestEventList():void {
   CursorManager.setBusyCursor();
 
   // Send the request
-  m_eventListService.send({keyword: m_keyword.text});
+  m_eventListService.send({keyword: m_keyword.text, 
+                           country: m_country.selectedItem.data});
 }
 
 // -----------------------------------------------------------------------------
@@ -112,3 +118,5 @@ private var m_eventListService:HTTPService;
 [Bindable]
 private var m_eventList:ArrayCollection;
 
+[Bindable]
+private var m_countryList:ArrayCollection;

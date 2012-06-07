@@ -22,11 +22,19 @@ xmlns:mx="library://ns.adobe.com/flex/mx">
   
   <!-- Search form -->
   <mx:Form width="100%" color="0x323232" paddingTop="0">
+    
     <mx:FormHeading fontSize="10"  label="Find Events" paddingTop="0" />
     
-    <mx:FormItem label="Keyword">
-      <s:TextInput id="m_keyword" width="200"/>
-    </mx:FormItem>
+    <s:HGroup width="100%">
+      <mx:FormItem label="Keyword">
+        <s:TextInput id="m_keyword" width="200" enter="prv_requestEventList()"/>
+      </mx:FormItem>
+
+     <mx:FormItem label="Country">
+       <mx:ComboBox id="m_country" width="200" 
+                    dataProvider="{m_countryList}" />
+     </mx:FormItem>
+    </s:HGroup>
 
     <mx:FormItem>
       <s:Button click="prv_requestEventList()" label="Submit Event Query" />

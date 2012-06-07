@@ -18,7 +18,7 @@ public function setEvent(eventObj:Object):void {
 
   // Event description text
   var eventDescr:String = "<b>Title:</b> " + eventObj.title + "<br>";
-  eventDescr += "<b>Address:</b> " + eventObj.address + "<br>";
+  eventDescr += "<b>Venue:</b> " + eventObj.venue + "<br>";
   eventDescr += "<b>Start:</b> " + eventObj.start_date + "<br>";
   eventDescr += "<b>End:</b> " + eventObj.end_date + "<br>";
   eventDescr += "<b>Organizer:</b> " + eventObj.organizer + "<br><br>";

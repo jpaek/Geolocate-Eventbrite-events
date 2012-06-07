@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <config>
-  <eventbriteAppKey></eventbriteAppKey>
-  <locatorUrl></locatorUrl>  
-  <mapUrl></mapUrl>
+  <mapUrl>http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer</mapUrl>
   <eventQueryUrl>php/getEvents.php</eventQueryUrl>
-  <locatorOutFields></locatorOutFields>
-  <wkid></wkid>
-  <lonMin></lonMin>
-  <latMin></latMin>
-  <lonMax></lonMax>
-  <latMax></latMax>
+  <locatorOutFields>Loc_name</locatorOutFields>
+  <wkid>102100</wkid>
+  <lonMin>-19411336</lonMin>
+  <latMin>-469630</latMin>
+  <lonMax>19411336</lonMax>
+  <latMax>469630</latMax>
 </config>

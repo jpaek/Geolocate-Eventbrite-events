@@ -9,7 +9,6 @@
 // Import ArcGIS package
 import com.esri.ags.Graphic;
 import com.esri.ags.geometry.MapPoint;
-import com.esri.ags.tasks.supportClasses.AddressCandidate;
 import com.esri.ags.utils.WebMercatorUtil;
 import com.esri.ags.SpatialReference;
 import com.esri.ags.geometry.Extent;
@@ -35,7 +34,6 @@ import libs.helpers.Config;
 public function init(config:Config):void {
 
   // Set the URL of the locator service
-  m_locateTask.url = config.getValue("locatorUrl");
   m_mapLayer.url = config.getValue("mapUrl"); 
 
   // Initialize map extent
@@ -45,35 +43,21 @@ public function init(config:Config):void {
                             config.getValue('latMax'), 
                            new SpatialReference(config.getValue('wkid')));
 
-  // Set the output fields to be returned from locator service
-  m_locatorOutFields = new Array();
-  if (config.getValue("locatorOutFields") is ArrayCollection) {
-    m_locatorOutFields = config.getValue("locatorOutFields").source;
-  }
-  else {
-    m_locatorOutFields.add(config.getValue("locatorOutFields"));
-  }
 }
 
 // -----------------------------------------------------------------------------
 // Request to find the geographical location of the given event venue address 
 public function findEvent(eventInfo:Object):void {
 
-  // Get the address of the event venue
-  var eventVenue:Object = { SingleLine: eventInfo.address };
-
   // Set the current event 
   m_currentEvent = eventInfo;
 
   // Clear the previously drawn event info
-  m_graphicsLayer.clear();
   m_map.infoWindow.hide();
+  m_graphicsLayer.clear();
 
   // Send the request to get event location
-  m_locateTask.outSpatialReference = m_map.spatialReference;
-  m_locateTask.addressToLocations(eventVenue, m_locatorOutFields, 
-                                  new AsyncResponder(prv_eventFound, 
-                                                     prv_eventSearchFault));
+  prv_mapEvent(eventInfo);
 }
 
 // =============================================================================
@@ -82,45 +66,31 @@ public function findEvent(eventInfo:Object):void {
 // -----------------------------------------------------------------------------
 // Request to find the event location returned output.  Display the event 
 // location and info on the map.
-private function prv_eventFound(candidates:Array, token:Object = null):void {
+private function prv_mapEvent(eventInfo:Object):void {
 
-  // Found location matching given address
-  if (candidates.length > 0) {
+  // Create a map point using the lat/lon coordinates of the event
+  var eventPoint:MapPoint = WebMercatorUtil.geographicToWebMercator(
+                              new MapPoint(eventInfo.longitude, 
+                                           eventInfo.latitude)) as MapPoint;
 
-    // Get the object containing location and initialize the placemark
-    var addressCandidate:AddressCandidate = candidates[0];
-    var eventGraphic:Graphic = new Graphic();
 
-    // Set the placemark
-    eventGraphic.geometry = addressCandidate.location;
-    eventGraphic.symbol = m_eventSymbol;
-    eventGraphic.toolTip = addressCandidate.address.toString();
-    eventGraphic.id = "graphic";
+  // Set the placemark
+  var eventGraphic:Graphic = new Graphic();
+  eventGraphic.geometry = eventPoint;
+  eventGraphic.symbol = m_eventSymbol;
+  eventGraphic.toolTip = eventInfo.title;
+  eventGraphic.id = "graphic";
 
-    // Show the information about the events
-    prv_showEventInfo(addressCandidate.location);
-    //eventGraphic.addEventListener(MouseEvent.CLICK, prv_showEventInfo);
-    m_graphicsLayer.add(eventGraphic);
+  // Show the information about the events
+  prv_showEventInfo(eventPoint);
+  //eventGraphic.addEventListener(MouseEvent.CLICK, prv_showEventInfo);
+  m_graphicsLayer.add(eventGraphic);
 
-    // Center the map to the event location
-    m_map.centerAt(eventGraphic.geometry as MapPoint);
+  // Center the map to the event location
+  m_map.centerAt(eventPoint);
 
-    // Zoom into the location of the map
-    m_map.extent = eventGraphic.geometry.extent;
-    m_map.scale = prv_findEventZoomLevel(addressCandidate.attributes.Loc_name);
-  }
-
-  // No event matched the given address
-  else {
-    Alert.show("Sorry, couldn't find a location of the event");
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Fail to get output from the request to get location of the event. 
-// Print the error message.
-private function prv_eventSearchFault(info:Object, token:Object = null):void {
-  Alert.show("Failure: \n" + info.toString());
+  // Zoom into the location of the map
+  m_map.scale = prv_findEventZoomLevel("_City");
 }
 
 // -----------------------------------------------------------------------------
@@ -177,4 +147,3 @@ private function prv_showEventInfo(location:MapPoint):void {
 // =============================================================================
 // Define private data members
 private var m_currentEvent:Object;
-private var m_locatorOutFields:Array;
