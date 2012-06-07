@@ -42,14 +42,14 @@ if ($country != '') {
   $keywordParam .= '&country=' . urlencode($country);
 }
 
-$queryUrl .= $appKeyParam . '&' . $keywordParam;
+$queryUrl .= $appKeyParam . '&' . $keywordParam . '&max=100';
 
 // ----------------------------------------------------------------------------
 // Get result event list from eventbrite
 $resultStr = file_get_contents($queryUrl);
 
 if (!$resultStr) {
-  $eventList->addChild('error', 'Failed to get search results from eventbrite');
+  $eventList->addChild('error', 'No Events Found');
   echo $eventList->asXML();
   exit();
 }
@@ -60,6 +60,13 @@ if (!$queryResult) {
   echo $eventList->asXML();
   exit();
 }
+
+if (property_exists($queryResult, 'error')) {
+  $eventList->addChild('error', $queryResult->error->error_type . ': ' . 
+                                $queryResult->error->error_message);
+  echo $eventList->asXML();
+  exit();
+}   
 
 // ----------------------------------------------------------------------------
 // Parse the event reulst list into format that can be consumed by 
@@ -80,35 +87,41 @@ foreach ($queryResult->events as $resultEvent) {
   // Get venue
   $resultVenue = $resultEvent->venue;
 
-  // If the venue does not have latitude and longitude coordinates,
+  // If the venue does not have valid latitude and longitude coordinates,
   // skip it.
   if (!(property_exists($resultVenue, 'latitude') && 
         property_exists($resultVenue, 'longitude')) ||
       !(trim($resultVenue->latitude) != '' &&
-        trim($resultVenue->longitude) != '')) {
+        trim($resultVenue->longitude) != '') ||
+       ($resultVenue->latitude == 0 && 
+        $resultVenue->longitude == 0)) {
     continue;
   }
  
   // Add the event to the event list
   
+  set_error_handler('handleError');
   try {
     $event = $eventList->addChild('event');
-    $event->addChild('id', htmlentities($resultEvent->id));
-    $event->addChild('title', htmlentities($resultEvent->title));
-    $event->addChild('start_date', htmlentities($resultEvent->start_date));
-    $event->addChild('end_date', htmlentities($resultEvent->end_date));
-    $event->addChild('url', htmlentities($resultEvent->url));
-
-    $logo = empty($resultEvent->logo) ? '' : $resultEvent->logo;
-    $event->addChild('logo', $logo);
-    $resultAddress = $resultEvent->venue->address . ', '. 
-                     $resultEvent->venue->city . ', ' .
-                     $resultEvent->venue->region . ', ' .
-                     $resultEvent->venue->country;
-    $event->addChild('latitude', $resultVenue->latitude);
-    $event->addChild('longitude', $resultVenue->longitude);
-    $event->addChild('venue', $resultVenue->name);
-    $event->addChild('organizer', $resultEvent->organizer->name);
+    $event->addChild('id', 
+                     iconv('ISO-8859-1', 'UTF-8', $resultEvent->id));
+    $event->addChild('title', 
+                     iconv('ISO-8859-1', 'UTF-8', $resultEvent->title));
+    $event->addChild('start_date', 
+                     iconv('ISO-8859-1', 'UTF-8', $resultEvent->start_date));
+    $event->addChild('end_date', 
+                     iconv('ISO-8859-1', 'UTF-8', $resultEvent->end_date));
+    $event->addChild('url', 
+                     iconv('ISO-8859-1', 'UTF-8', $resultEvent->url));
+    $event->addChild('latitude', 
+                     iconv('ISO-8859-1', 'UTF-8', $resultVenue->latitude));
+    $event->addChild('longitude', 
+                     iconv('ISO-8859-1', 'UTF-8', $resultVenue->longitude));
+    $event->addChild('venue', 
+                     iconv('ISO-8859-1', 'UTF-8', $resultVenue->name));
+    $event->addChild('organizer', 
+                     iconv('ISO-8859-1', 'UTF-8', 
+                           $resultEvent->organizer->name));
   }
 
   // I have noticed that some of the results from eventbrite is missing the
@@ -122,5 +135,21 @@ foreach ($queryResult->events as $resultEvent) {
 // ----------------------------------------------------------------------------
 // Print output.
 echo $eventList->asXML();
+
+
+// ----------------------------------------------------------------------------
+// Error handler function to catch all warnings and errors when
+// parsing JSON result into XML doc.
+// Source: http://stackoverflow.com/questions/1241728/can-i-try-catch-a-warning 
+function handleError($errno, $errstr, $errfile, $errline, array $errcontext)
+{
+    // error was suppressed with the @-operator
+    if (0 === error_reporting()) {
+        return false;
+    }
+
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+}
+
 
 ?>
