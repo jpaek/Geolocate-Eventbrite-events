@@ -93,11 +93,11 @@ foreach ($queryResult->events as $resultEvent) {
   
   try {
     $event = $eventList->addChild('event');
-    $event->addChild('id', urlencode($resultEvent->id));
-    $event->addChild('title', urlencode($resultEvent->title));
-    $event->addChild('start_date', urlencode($resultEvent->start_date));
-    $event->addChild('end_date', urlencode($resultEvent->end_date));
-    $event->addChild('url', urlencode($resultEvent->url));
+    $event->addChild('id', htmlentities($resultEvent->id));
+    $event->addChild('title', htmlentities($resultEvent->title));
+    $event->addChild('start_date', htmlentities($resultEvent->start_date));
+    $event->addChild('end_date', htmlentities($resultEvent->end_date));
+    $event->addChild('url', htmlentities($resultEvent->url));
 
     $logo = empty($resultEvent->logo) ? '' : $resultEvent->logo;
     $event->addChild('logo', $logo);
