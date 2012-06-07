@@ -21,9 +21,11 @@ export FLEX_HOME={Directory where you install Flex}
 export PATH=${PATH}:${ANT_HOME}/bin
 
 # Set configuration file.
-* Open config/Config.xml.template
+* Open config/Config.xml
 * Set each configuration parmaeter with appropriate value
-* Rename config/Config.xml.template as config/Config.xml
+* Put your Eventbrite API Key into config/AppKey.txt.
+  API Key should be on the first line of config/AppKey.txt,
+  and it should be the only thing on that line.
 
 # Go to the root of the checkout directory and build app
 % cd {root of the checkout}

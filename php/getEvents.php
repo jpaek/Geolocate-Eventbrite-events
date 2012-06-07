@@ -1,6 +1,6 @@
 <?php
 // ============================================================================
-// PHP server-side script to get the events matching user query from eventbrite
+// PHP server-side script to get the events matching user query from Eventbrite
 // and parse into format that can be consumed by the Flex application.
 
 // ----------------------------------------------------------------------------
@@ -11,7 +11,7 @@ $eventList = new SimpleXMLElement('<events></events>');
 $appKeyFile = fopen('../config/AppKey.txt', 'r');
 
 if (!$appKeyFile) {
-  $eventList->addChild('error', 'Fail to get Eventbrite App Key');
+  $eventList->addChild('error', 'Missing Eventbrite App Key');
   echo $eventList->asXML();
   exit();
 }
@@ -45,7 +45,7 @@ if ($country != '') {
 $queryUrl .= $appKeyParam . '&' . $keywordParam . '&max=100';
 
 // ----------------------------------------------------------------------------
-// Get result event list from eventbrite
+// Get result event list from Eventbrite
 $resultStr = file_get_contents($queryUrl);
 
 if (!$resultStr) {
@@ -56,7 +56,7 @@ if (!$resultStr) {
 
 $queryResult = json_decode($resultStr);
 if (!$queryResult) {
-  $eventList->addChild('error', 'Failed to load search results from eventbrite');
+  $eventList->addChild('error', 'Result Parsing Failed');
   echo $eventList->asXML();
   exit();
 }
@@ -89,11 +89,11 @@ foreach ($queryResult->events as $resultEvent) {
 
   // If the venue does not have valid latitude and longitude coordinates,
   // skip it.
-  if (!(property_exists($resultVenue, 'latitude') && 
-        property_exists($resultVenue, 'longitude')) ||
-      !(trim($resultVenue->latitude) != '' &&
-        trim($resultVenue->longitude) != '') ||
-       ($resultVenue->latitude == 0 && 
+  if (!(property_exists($resultVenue, 'latitude') and 
+        property_exists($resultVenue, 'longitude')) or
+      !(trim($resultVenue->latitude) != '' and
+        trim($resultVenue->longitude) != '') or
+       ($resultVenue->latitude == 0 and 
         $resultVenue->longitude == 0)) {
     continue;
   }
@@ -124,7 +124,7 @@ foreach ($queryResult->events as $resultEvent) {
                            $resultEvent->organizer->name));
   }
 
-  // I have noticed that some of the results from eventbrite is missing the
+  // I have noticed that some of the results from Eventbrite is missing the
   // required fields.  In this case, just continue on to the next result
   catch (Exception $e) {
     continue;
