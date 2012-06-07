@@ -93,11 +93,11 @@ foreach ($queryResult->events as $resultEvent) {
   
   try {
     $event = $eventList->addChild('event');
-    $event->addChild('id', $resultEvent->id);
-    $event->addChild('title', $resultEvent->title);
-    $event->addChild('start_date', $resultEvent->start_date);
-    $event->addChild('end_date', $resultEvent->end_date);
-    $event->addChild('url', $resultEvent->url);
+    $event->addChild('id', urlencode($resultEvent->id));
+    $event->addChild('title', urlencode($resultEvent->title));
+    $event->addChild('start_date', urlencode($resultEvent->start_date));
+    $event->addChild('end_date', urlencode($resultEvent->end_date));
+    $event->addChild('url', urlencode($resultEvent->url));
 
     $logo = empty($resultEvent->logo) ? '' : $resultEvent->logo;
     $event->addChild('logo', $logo);
@@ -108,11 +108,6 @@ foreach ($queryResult->events as $resultEvent) {
     $event->addChild('latitude', $resultVenue->latitude);
     $event->addChild('longitude', $resultVenue->longitude);
     $event->addChild('venue', $resultVenue->name);
-    $event->addChild('address', implode(',', [$resultVenue->address,
-                                             $resultVenue->address_2,
-                                             $resultVenue->city,
-                                             $resultVenue->postal_code,
-                                             $resultVenue->city]));
     $event->addChild('organizer', $resultEvent->organizer->name);
   }
 
